@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../node_modules/jquery-ui-1.12.1.custom/jquery-ui-1.12.1.custom/jquery-ui.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <title>Document</title>
+</head>
+<body>
+
+  <!-- Регион для приложения -->
+  <div id="main-region" class="container">
+    <p>Static content of web page</p>
+  </div>
+
+  <!-- Регион для хедера -->
+  <div id="header-region"></div>
+
+  <!-- Регион для модального окна -->
+  <div id="dialog-region"></div>
+
+  <!-- Шаблон хедера -->
+  <script type="text/template" id="header-template">
+    <div class="container">
+      <div class="navbar-header"><a href="#contacts" class="navbar-brand">Contact Manager</a></div>
+      <ul class="nav navbar-nav"></ul>
+    </div>
+  </script>
+
+  <! -- Шаблон пункта меню -->
+  <script type="text/template" id="header-link">
+    <a href="#<%= url %>"><%= name %></a>
+  </script>
+
+  <!--Шаблон одного контакта в таблице -->
+  <script type="text/template" id="contact-list-item">
+    <td><%= firstName %></td>
+    <td><%= lastName %></td>
+    <td>
+      <a href="#contacts/<% id %>" class="btn btn-default btn-sm js-show">
+        <span class="glyphicon glyphicon-eye-open"> Show</span>
+      </a>
+      <a href="#contacts/<% id %>/edit" class="btn btn-default btn-sm js-edit">
+        <span class="glyphicon glyphicon-pencil"> Edit</span>
+      </a>
+      <button class="btn btn-default btn-sm js-delete">
+        <span class="glyphicon glyphicon-remove"> Delete</span>
+      </button>
+    </td>
+  </script>
+
+  <!-- Шаблон таблицы контактов -->
+  <script type="text/template" id="contact-list">
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </script>
+
+  <!--Шаблон одного контакта на отдельной странице -->
+  <script type="text/template" id="contact-view">
+    <h1><%= firstName %> <%= lastName %></h1>
+    <a href="#contacts/<%= id %>/edit" class="btn btn-default btn-sm js-edit">
+      <span class="glyphicon glyphicon-pencil"> Edit contact</span>
+    </a>
+    <p><strong>Phone number:</strong><%= phoneNumber %></p>
+  </script>
+
+  <!--Шаблон несуществующего контакта -->
+  <script type="text/template" id="missing-contact-view">
+    <div class="alert alert-danger">The contact doesn't exist.</div>
+  </script>
+
+  <!-- Шаблон редактирования контакта -->
+  <script type="text/template" id="contact-form">
+    <form action="">
+      <div class="form-group">
+        <label for="contact-firstName" class="control-label">First Name</label>
+        <input type="text" id="contact-firstName" class="form-control" name="firstName" value="<%= firstName %>">
+      </div>
+      <div class="form-group">
+        <label for="contact-lastName" class="control-label">Last Name</label>
+        <input type="text" id="contact-lastName" class="form-control" name="lastName" value="<%= lastName %>">
+      </div>
+      <div class="form-group">
+        <label for="contact-phoneNumber" class="control-label">Phone Number</label>
+        <input type="text" id="contact-phoneNumber" class="form-control" name="phoneNumber" value="<%= phoneNumber %>">
+      </div>
+      <button class="btn btn-default js-submit">Save</button>
+    </form>
+  </script>
+
+  <!-- Шаблон спина -->
+  <script type="text/template" id="loading-view">
+    <h1><%= title %></h1>
+    <p><%= message %></p>
+    <div id="spinner" class="spinner"></div>
+  </script>
+
+  <!-- Шаблон лейаута -->
+  <script type="text/template" id="contact-list-layout">
+    <div id="panel-region"></div>
+    <div id="contacts-region"></div>
+  </script>
+
+  <!-- Шаблон кнопки добавления контакта и фильтра -->
+  <script type="text/template" id="contact-list-panel">
+    <button class="btn btn-primary js-new">New contact</button>
+    <form action="" id="filter-form" class="form-search form-inline pull-right">
+      <div class="input-append">
+        <input type="text" class="span2 search-query js-filter-criterion">
+        <button type="submit" class="btn btn-default">Filter contacts</button>
+      </div>
+    </form>
+  </script>
+
+  <!-- Шаблон сообщения, что контакты не найдены -->
+  <script type="text/template" id="contact-list-none">
+    <td colspan="3">No contacts to display.</td>
+  </script>
+
+  <!-- Шаблон страницы About -->
+  <script type="text/template" id="about-view">
+    <h1>About application</h1>
+    <p>This is a testing application built on Backbone and Marionette</p>
+  </script>
+
+  <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="../node_modules/jquery-ui-1.12.1.custom/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+  <script src="../node_modules/json2/lib/JSON2/static/json2.js"></script>
+  <script src="../node_modules/underscore/underscore-min.js"></script>
+  <script src="../node_modules/backbone/backbone-min.js"></script>
+  <script src="../node_modules/backbone.localstorage/backbone.localStorage-min.js"></script>
+  <script src="../node_modules/backbone.syphon/lib/backbone.syphon.min.js"></script>
+  <script src="../node_modules/backbone.select/dist/backbone.select.min.js"></script>
+  <script src="../node_modules/backbone.marionette/lib/backbone.marionette.js"></script>
+  <script src="../node_modules/spin/dist/spin.min.js"></script>
+  <script src="../node_modules/jquery.spin/javascripts/jquery.spin.js"></script>
+
+  <script src="js/apps/configs/marionette/regions/dialog.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/apps/configs/storage/localStorage.js"></script>
+
+  <script src="js/entities/common.js"></script>
+  <script src="js/entities/header.js"></script>
+  <script src="js/entities/contact.js"></script>
+  <script src="js/common/views.js"></script>
+
+  <script src="js/apps/contacts/contacts_app.js"></script>
+
+  <script src="js/apps/contacts/common/views.js"></script>
+
+  <script src="js/apps/contacts/list/list_view.js"></script>
+  <script src="js/apps/contacts/list/list_controller.js"></script>
+
+  <script src="js/apps/contacts/show/show_view.js"></script>
+  <script src="js/apps/contacts/show/show_controller.js"></script>
+
+  <script src="js/apps/contacts/edit/edit_view.js"></script>
+  <script src="js/apps/contacts/edit/edit_controller.js"></script>
+
+  <script src="js/apps/contacts/new/new_view.js"></script>
+
+  <script src="js/apps/about/about_app.js"></script>
+  <script src="js/apps/about/show/about_view.js"></script>
+  <script src="js/apps/about/show/about_controller.js"></script>
+
+  <script src="js/apps/header/header_app.js"></script>
+  <script src="js/apps/header/list/list_view.js"></script>
+  <script src="js/apps/header/list/list_controller.js"></script>
+
+  <script type="text/javascript">
+    ContactManager.start();
+  </script>
+</body>
+</html>
